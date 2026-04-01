@@ -1,5 +1,6 @@
 package com.nick_ug.quizapp;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -8,49 +9,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/quiz")
 public class QuizController {
-    private List<Quiz> quizList = new ArrayList<>();
-    private Long idCounter = 1L;
-    private Long questionIdCounter = 1L;
+    @Autowired
+    private QuizRepository quizRepository;
 
-    @GetMapping("/{quizId}/add-question")
-    public String addQuestion(@PathVariable Long quizId,
-                              @RequestParam String text,
-                              @RequestParam String answer) {
-
-        for (Quiz quiz : quizList) {
-            if (quiz.getId().equals(quizId)) {
-
-                Question q = new Question(questionIdCounter++, text, answer);
-                quiz.getQuestions().add(q);
-
-                return "Question added!";
-            }
-        }
-
-        return "Quiz not found!";
-    }
-    @GetMapping("/{quizId}/questions")
-    public List<Question> getQuestions(@PathVariable Long quizId) {
-
-        for (Quiz quiz : quizList) {
-            if (quiz.getId().equals(quizId)) {
-                return quiz.getQuestions();
-            }
-        }
-
-        return new ArrayList<>();
-    }
+//    create QUIZ
     @PostMapping("/create")
-    public Quiz createQuiz(@RequestParam String title){
-
-        Quiz quiz = new Quiz(idCounter++,title);
-        quizList.add(quiz);
-
-        return quiz;
+    public Quiz createQuiz(@RequestBody Quiz quiz){
+        return quizRepository.save(quiz);
     }
+
+    //GET ALL QUIZ
     @GetMapping("/all")
     public List<Quiz> getAllQuizzes() {
-        return quizList;
+        return quizRepository.findAll();
     }
+
+    //GET by ID
+    @GetMapping("/{id}")
+    public Quiz getQuiz(@PathVariable Long id) {
+        return quizRepository.findById(id).orElse(null);
+    }
+
+
 
 }

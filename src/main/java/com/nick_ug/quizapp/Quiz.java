@@ -1,14 +1,24 @@
 package com.nick_ug.quizapp;
 
+import jakarta.persistence.*;
+
 import java.util.*;
 
+@Entity
 public class Quiz {
-    private Long id;
-    private String title;
-    private List<Question> questions = new ArrayList<>();
 
-    public Quiz(Long id,String title){
-        this.id = id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String title;
+
+//@OneToMany
+//    private List<Question> questions = new ArrayList<>();
+
+    public Quiz(){}
+
+    public Quiz(String title){
         this.title = title;
     }
 
@@ -19,8 +29,12 @@ public class Quiz {
     public String getTitle(){
         return title;
     }
-    public List<Question> getQuestions() {
-        return questions;
+
+    public void setTitle(String title) {
+        this.title = title;
     }
+//    public List<Question> getQuestions() {
+//        return questions;
+//    }
 
 }
