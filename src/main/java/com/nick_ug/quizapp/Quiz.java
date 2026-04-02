@@ -13,8 +13,8 @@ public class Quiz {
 
     private String title;
 
-//@OneToMany
-//    private List<Question> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    private List<Question> questions;
 
     public Quiz(){}
 
@@ -33,8 +33,8 @@ public class Quiz {
     public void setTitle(String title) {
         this.title = title;
     }
-//    public List<Question> getQuestions() {
-//        return questions;
-//    }
+    public List<Question> getQuestions() {
+        return questions;
+    }
 
 }
