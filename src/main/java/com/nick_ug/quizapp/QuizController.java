@@ -12,6 +12,9 @@ public class QuizController {
     private QuizRepository quizRepository;
 
     @Autowired
+    private QuizService quizService;
+
+    @Autowired
     private QuestionRepository questionRepository;
 
 //    create QUIZ
@@ -28,14 +31,14 @@ public class QuizController {
 
     //GET by ID
     @GetMapping("/{id}")
-    public Quiz getQuiz(@PathVariable Long id) {
-        return quizRepository.findById(id).orElse(null);
+    public QuizDTO getQuiz(@PathVariable Long id) {
+        return quizService.getQuiz(id);
     }
 
     @PostMapping("/{quizId}/add-question")
     public String addQuestion(@PathVariable Long quizId, @RequestBody Question question){
-        Quiz quiz = quizRepository.findById(quizId).orElse(null);
-        if (quiz == null) return "Quiz not found!";
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new QuizNotFoundException("Quiz not found"));
 
         question.setQuiz(quiz);
         questionRepository.save(question);
@@ -47,20 +50,7 @@ public class QuizController {
     @PostMapping("/{id}/submit")
     public String submitQuiz(@PathVariable Long id,
                              @RequestBody List<String> answers) {
-
-        Quiz quiz = quizRepository.findById(id).orElse(null);
-        if (quiz == null) return "Quiz not found";
-
-        int score = 0;
-        List<Question> questions = quiz.getQuestions();
-
-        for (int i = 0; i < questions.size(); i++) {
-            if (questions.get(i).getAnswer().equalsIgnoreCase(answers.get(i))) {
-                score++;
-            }
-        }
-
-        return "Score: " + score + "/" + questions.size();
+        return quizService.submitQuiz(id, answers);
     }
 
 
