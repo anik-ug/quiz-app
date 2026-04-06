@@ -1,6 +1,7 @@
 package com.nick_ug.quizapp;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.*;
 
@@ -11,6 +12,7 @@ public class Quiz {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Title cannot be empty")
     private String title;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)

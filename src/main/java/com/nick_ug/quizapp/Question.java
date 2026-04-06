@@ -2,6 +2,7 @@ package com.nick_ug.quizapp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Question {
@@ -10,7 +11,11 @@ public class Question {
     private Long id;
 
 
+    @NotBlank (message = "Question text cannot be empty")
     private String text;
+
+    @JsonIgnore
+    @NotBlank(message = "Answer cannot be empty")
     private String answer;
 
     @JsonIgnore

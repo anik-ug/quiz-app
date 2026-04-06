@@ -1,6 +1,8 @@
 package com.nick_ug.quizapp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,5 +46,35 @@ public class QuizService {
 
         return "Score: " + score + "/" + questions.size();
     }
+
+    public Page<QuizDTO> getAllQuizzes(Pageable pageable) {
+
+        Page<Quiz> quizPage = quizRepository.findAll(pageable);
+
+        return quizPage.map(quiz -> new QuizDTO(
+                quiz.getId(),
+                quiz.getTitle(),
+                quiz.getQuestions()
+                        .stream()
+                        .map(q -> new QuestionDTO(q.getId(),q.getText()))
+                        .toList()
+        ));
+    }
+
+    public List<QuizDTO> searchQuiz(String title){
+        List<Quiz> quizzes = quizRepository.findByTitleContainingIgnoreCase(title);
+
+        return quizzes.stream()
+                .map(q->new QuizDTO(
+                        q.getId(),
+                        q.getTitle(),
+                        q.getQuestions()
+                                .stream()
+                                .map(ques -> new QuestionDTO(ques.getId(), ques.getText()))
+                                .toList()
+                ))
+                .toList();
+    }
+
 
 }
