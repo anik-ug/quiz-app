@@ -1,6 +1,7 @@
 package com.nick_ug.quizapp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -14,7 +15,7 @@ public class Question {
     @NotBlank (message = "Question text cannot be empty")
     private String text;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotBlank(message = "Answer cannot be empty")
     private String answer;
 
