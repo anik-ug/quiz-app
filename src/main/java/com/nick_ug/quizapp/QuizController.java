@@ -82,6 +82,7 @@ public class QuizController {
                 .orElseThrow(() -> new QuizNotFoundException("Quiz not found"));
 
         question.setQuiz(quiz);
+        quiz.getQuestions().add(question);
         questionRepository.save(question);
 
         return "Question added";
