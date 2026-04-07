@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @Tag(name =  "Quiz API",description = "Operations related to quiz management")
 @RestController
 @RequestMapping("/quiz")
